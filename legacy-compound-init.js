@@ -1,25 +1,32 @@
-import loadSchema from "./legacy-compound-schema-loader";
 'use strict';
 
-export default function init(compound, Schema, AbstractClass) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = init;
+
+var _legacyCompoundSchemaLoader = require('./legacy-compound-schema-loader');
+
+var _legacyCompoundSchemaLoader2 = _interopRequireDefault(_legacyCompoundSchemaLoader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+'use strict';
+
+function init(compound, Schema, AbstractClass) {
 
     if (global.railway) {
         global.railway.orm = exports;
     } else {
         compound.orm = {
-            Schema,
-            AbstractClass
+            Schema: Schema,
+            AbstractClass: AbstractClass
         };
         if (compound.app.enabled('noeval schema')) {
-            compound.orm.schema = loadSchema(
-                Schema,
-                compound.root + '/db/schema',
-                compound.app.get('database'),
-                compound
-            );
+            compound.orm.schema = (0, _legacyCompoundSchemaLoader2.default)(Schema, compound.root + '/db/schema', compound.app.get('database'), compound);
             if (compound.app.enabled('autoupdate')) {
-                compound.on('ready', function() {
-                    compound.orm.schema.forEach(function(s) {
+                compound.on('ready', function () {
+                    compound.orm.schema.forEach(function (s) {
                         s.autoupdate();
                         if (s.backyard) {
                             s.backyard.autoupdate();
@@ -41,7 +48,8 @@ export default function init(compound, Schema, AbstractClass) {
     }
 
     function initialize() {
-        var railway = './lib/railway', init;
+        var railway = './lib/railway',
+            init;
         try {
             init = require(railway);
         } catch (e) {
@@ -51,5 +59,5 @@ export default function init(compound, Schema, AbstractClass) {
             init(compound);
         }
     }
-
 };;
+module.exports = exports.default;
