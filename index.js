@@ -1,9 +1,13 @@
+import * as lischema_moduleDefault from "./lib/schema";
+import AbstractClass from "./lib/model.js";
+import legacycompoundschemaloader_moduleDefault from "./legacy-compound-schema-loader";
+import legacycompoundinit_moduleDefault from "./legacy-compound-init";
+import libsql_moduleDefault from "./lib/sql";
 'use strict';
 
-const { Schema } = require('./lib/schema');
-const AbstractClass = require('./lib/model.js');
+const { Schema } = lischema_moduleDefault;
 
-module.exports = {
+export default {
 
     Schema,
 
@@ -11,15 +15,15 @@ module.exports = {
 
     // deprecated api
     loadSchema: function(filename, settings, compound) {
-        return require('./legacy-compound-schema-loader')(Schema, filename, settings, compound);
+        return legacycompoundschemaloader_moduleDefault(Schema, filename, settings, compound);
     },
 
     init: function init(compound) {
-        return require('./legacy-compound-init')(compound, Schema, AbstractClass);
+        return legacycompoundinit_moduleDefault(compound, Schema, AbstractClass);
     },
 
     get BaseSQL() {
-        return require('./lib/sql');
+        return libsql_moduleDefault;
     },
 
     get version() {
@@ -34,5 +38,5 @@ module.exports = {
         return require('./test/common_test');
     }
 
-};
+};;
 

@@ -1,5 +1,5 @@
 
-module.exports = function(Schema, filename, settings, compound) {
+export default function(Schema, filename, settings, compound) {
     var schema = [];
     var definitions = require(filename);
     Object.keys(definitions).forEach(function(k) {
@@ -33,4 +33,4 @@ module.exports = function(Schema, filename, settings, compound) {
     function define(db, def) {
         def(db, compound);
     }
-};
+};;

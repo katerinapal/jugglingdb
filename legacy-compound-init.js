@@ -1,8 +1,7 @@
+import loadSchema from "./legacy-compound-schema-loader";
 'use strict';
 
-var loadSchema = require('./legacy-compound-schema-loader');
-
-module.exports = function init(compound, Schema, AbstractClass) {
+export default function init(compound, Schema, AbstractClass) {
 
     if (global.railway) {
         global.railway.orm = exports;
@@ -53,4 +52,4 @@ module.exports = function init(compound, Schema, AbstractClass) {
         }
     }
 
-};
+};;
