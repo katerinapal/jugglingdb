@@ -1,12 +1,7 @@
-// This test written in mocha+should.js
-const should = require('./init.js');
+import * as should from "./init.js";
+import * as j from "../";
 
-let j = require('../'),
-    Schema = j.Schema,
-    AbstractClass = j.AbstractClass,
-    Hookable = j.Hookable,
-
-    db, User;
+let Schema = j.Schema, AbstractClass = j.AbstractClass, Hookable = j.Hookable, db, User;
 
 describe('hooks', function() {
 

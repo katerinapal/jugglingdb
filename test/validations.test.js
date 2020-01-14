@@ -1,8 +1,8 @@
-// This test written in mocha+should.js
-const should = require('./init.js');
-const Schema = require('../').Schema;
+import * as should from "./init.js";
+import * as Schema from "../";
+import * as j from "../";
 
-let j = require('../'), db, User;
+let db, User;
 const ValidationError = require('../lib/validations.js').ValidationError;
 
 function getValidAttributes() {

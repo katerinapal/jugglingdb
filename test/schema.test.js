@@ -1,6 +1,5 @@
-// This test written in mocha+should.js
-const should = require('./init.js');
-const Schema = require ('../').Schema;
+import * as should from "./init.js";
+import * as Schema from "../";
 
 let db = getSchema(), slave = getSchema(), Model, SlaveModel;
 
@@ -59,7 +58,7 @@ describe('schema', function() {
     describe('isActual', function() {
 
         it('should delegate schema check to adapter', function(done) {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             db.adapter.isActual = function(cb) {
                 return cb(null, true);
             };
@@ -71,7 +70,7 @@ describe('schema', function() {
         });
 
         it('should return undefined when adapter is schema-less', function(done) {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             delete db.adapter.isActual;
 
             db.isActual(function(err, result) {
@@ -85,7 +84,7 @@ describe('schema', function() {
     describe('autoupdate', function() {
 
         it('should delegate autoupdate to adapter', function(done) {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             db.adapter = {
                 autoupdate: done
             };
@@ -97,7 +96,7 @@ describe('schema', function() {
     describe('automigrate', function() {
 
         it('should delegate automigrate to adapter', function() {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             let called = false;
             db.adapter.automigrate = function(cb) {
                 process.nextTick(function() {
@@ -113,7 +112,7 @@ describe('schema', function() {
         });
 
         it('should reject in case of error', function() {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             const called = false;
             db.adapter.automigrate = function(cb) {
                 throw new Error('Oopsie');
@@ -133,7 +132,7 @@ describe('schema', function() {
     describe('defineForeignKey', function() {
 
         it('should allow adapter to define foreign key', function(done) {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             db.define('User', { something: Number });
             db.adapter = {
                 defineForeignKey(model, prop, cb) {
@@ -149,7 +148,7 @@ describe('schema', function() {
     describe('connect', function() {
 
         it('should delegate connect to adapter', function(done) {
-            const db = new Schema({
+            const db = new Schema.Schema({
                 initialize(schema, cb) {
                     schema.adapter = {
                         connect(cb) {
@@ -163,7 +162,7 @@ describe('schema', function() {
         });
 
         it('should support adapters without connections', function() {
-            const db = new Schema({
+            const db = new Schema.Schema({
                 initialize(schema, cb) {
                     schema.adapter = {};
                 }
@@ -175,7 +174,7 @@ describe('schema', function() {
         });
 
         it('should catch connection errors', function() {
-            const db = new Schema({
+            const db = new Schema.Schema({
                 initialize(schema, cb) {
                     schema.adapter = {
                         connect(cb) {
@@ -199,7 +198,7 @@ describe('schema', function() {
     describe('disconnect', function() {
 
         it('should delegate disconnection to adapter', function(done) {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             db.adapter = {
                 disconnect: done
             };
@@ -207,7 +206,7 @@ describe('schema', function() {
         });
 
         it('should call callback with "disconnect" is not handled by adapter', function(done) {
-            const db = new Schema('memory');
+            const db = new Schema.Schema('memory');
             delete db.adapter.disconnect;
             db.disconnect(done);
         });

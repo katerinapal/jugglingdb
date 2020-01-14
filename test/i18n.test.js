@@ -1,4 +1,5 @@
-let should = require('./init.js'), db, User;
+import * as should from "./init.js";
+let db, User;
 
 describe('i18n', function() {
     db = getSchema();

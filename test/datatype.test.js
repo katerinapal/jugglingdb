@@ -1,5 +1,4 @@
-// This test written in mocha+should.js
-const should = require('./init.js');
+import * as should from "./init.js";
 
 let db, Model;
 

@@ -1,5 +1,5 @@
 
-module.exports = function(Schema, filename, settings, compound) {
+var exportedObject = function(Schema, filename, settings, compound) {
     var schema = [];
     var definitions = require(filename);
     Object.keys(definitions).forEach(function(k) {
@@ -34,3 +34,5 @@ module.exports = function(Schema, filename, settings, compound) {
         def(db, compound);
     }
 };
+
+export { exportedObject as legacy-compound-schema-loaderjs };;

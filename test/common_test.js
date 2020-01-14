@@ -1,5 +1,6 @@
 
-const Schema = require('../index').Schema;
+import * as Schema from "../index";
+import crypto from "crypto";
 const Text = Schema.Text;
 
 let nbSchemaRequests = 0;
@@ -327,7 +328,6 @@ function testOrm(schema) {
         };
 
         function calcHash(pass, salt) {
-            const crypto = require('crypto');
             const hash = crypto.createHash('sha256');
             hash.update(pass);
             hash.update(salt);
