@@ -1,4 +1,12 @@
-import { legacycompoundschemaloaderjs as loadSchema } from "./legacy-compound-schema-loader";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.legacycompoundinitjs = undefined;
+
+var _legacyCompoundSchemaLoader = require('./legacy-compound-schema-loader');
+
 'use strict';
 
 var exportedObject = function init(compound, Schema, AbstractClass) {
@@ -7,19 +15,14 @@ var exportedObject = function init(compound, Schema, AbstractClass) {
         global.railway.orm = exports;
     } else {
         compound.orm = {
-            Schema,
-            AbstractClass
+            Schema: Schema,
+            AbstractClass: AbstractClass
         };
         if (compound.app.enabled('noeval schema')) {
-            compound.orm.schema = loadSchema(
-                Schema,
-                compound.root + '/db/schema',
-                compound.app.get('database'),
-                compound
-            );
+            compound.orm.schema = (0, _legacyCompoundSchemaLoader.legacycompoundschemaloaderjs)(Schema, compound.root + '/db/schema', compound.app.get('database'), compound);
             if (compound.app.enabled('autoupdate')) {
-                compound.on('ready', function() {
-                    compound.orm.schema.forEach(function(s) {
+                compound.on('ready', function () {
+                    compound.orm.schema.forEach(function (s) {
                         s.autoupdate();
                         if (s.backyard) {
                             s.backyard.autoupdate();
@@ -41,7 +44,8 @@ var exportedObject = function init(compound, Schema, AbstractClass) {
     }
 
     function initialize() {
-        var railway = './lib/railway', init;
+        var railway = './lib/railway',
+            init;
         try {
             init = require(railway);
         } catch (e) {
@@ -51,7 +55,7 @@ var exportedObject = function init(compound, Schema, AbstractClass) {
             init(compound);
         }
     }
-
 };
 
-export { exportedObject as legacycompoundinitjs };;
+exports.legacycompoundinitjs = exportedObject;
+;

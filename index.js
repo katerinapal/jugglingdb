@@ -1,38 +1,49 @@
-import * as lischema_moduleDefault from "./lib/schema";
-import { AbstractClass } from "./lib/model.js";
-import { legacycompoundschemaloaderjs as legacycompoundschemaloader } from "./legacy-compound-schema-loader";
-import { legacycompoundinitjs as legacycompoundinit } from "./legacy-compound-init";
-import { BaseSQL as sql } from "./lib/sql";
-import * as common_test from "./test/common_test";
+"use strict";
+
+var _schema = require("./lib/schema");
+
+var lischema_moduleDefault = _interopRequireWildcard(_schema);
+
+var _model = require("./lib/model.js");
+
+var _legacyCompoundSchemaLoader = require("./legacy-compound-schema-loader");
+
+var _legacyCompoundInit = require("./legacy-compound-init");
+
+var _sql = require("./lib/sql");
+
+var _common_test = require("./test/common_test");
+
+var common_test = _interopRequireWildcard(_common_test);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 'use strict';
 
-const { Schema } = lischema_moduleDefault;
+var Schema = lischema_moduleDefault.Schema;
+
 
 module.exports = {
 
-    Schema,
+    Schema: Schema,
 
-    AbstractClass,
+    AbstractClass: _model.AbstractClass,
 
     // deprecated api
-    loadSchema: function(filename, settings, compound) {
-        return legacycompoundschemaloader(Schema, filename, settings, compound);
+    loadSchema: function loadSchema(filename, settings, compound) {
+        return (0, _legacyCompoundSchemaLoader.legacycompoundschemaloaderjs)(Schema, filename, settings, compound);
     },
 
     init: function init(compound) {
-        return legacycompoundinit(compound, Schema, AbstractClass);
+        return (0, _legacyCompoundInit.legacycompoundinitjs)(compound, Schema, _model.AbstractClass);
     },
 
     get BaseSQL() {
-        return sql;
+        return _sql.BaseSQL;
     },
 
     get version() {
-        return require(
-            process.versions.node >= '6'
-            ? './package.json'
-            : '../package.json'
-        ).version;
+        return require(process.versions.node >= '6' ? './package.json' : '../package.json').version;
     },
 
     get test() {
@@ -40,4 +51,3 @@ module.exports = {
     }
 
 };
-

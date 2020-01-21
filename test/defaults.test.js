@@ -1,36 +1,42 @@
-import * as should from "./init.js";
+'use strict';
 
-const db = getSchema();
+var _init = require('./init.js');
 
-describe('defaults', function() {
-    let Server;
+var should = _interopRequireWildcard(_init);
 
-    before(function() {
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var db = getSchema();
+
+describe('defaults', function () {
+    var Server = void 0;
+
+    before(function () {
         Server = db.define('Server', {
             host: String,
             port: { type: Number, default: 80 }
         });
     });
 
-    it('should apply defaults on new', function() {
-        const s = new Server;
+    it('should apply defaults on new', function () {
+        var s = new Server();
         s.port.should.equal(80);
     });
 
-    it('should apply defaults on create', function(done) {
-        Server.create(function(err, s) {
+    it('should apply defaults on create', function (done) {
+        Server.create(function (err, s) {
             s.port.should.equal(80);
             done();
         });
     });
 
-    it('should apply defaults on read', function(done) {
+    it('should apply defaults on read', function (done) {
         db.defineProperty('Server', 'host', {
             type: String,
             default: 'localhost'
         });
-        Server.all(function(err, servers) {
-            (new String('localhost')).should.equal(servers[0].host);
+        Server.all(function (err, servers) {
+            new String('localhost').should.equal(servers[0].host);
             done();
         });
     });

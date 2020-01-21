@@ -1,10 +1,28 @@
-import * as should from "./init.js";
+'use strict';
 
-let db, Railway, Station;
+var _init = require('./init.js');
 
-describe('sc0pe', function() {
+var should = _interopRequireWildcard(_init);
 
-    before(function() {
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+var db = void 0,
+    Railway = void 0,
+    Station = void 0;
+
+describe('sc0pe', function () {
+
+    before(function () {
         db = getSchema();
         Railway = db.define('Railway', {
             URID: { type: String, index: true }
@@ -18,15 +36,15 @@ describe('sc0pe', function() {
         });
     });
 
-    beforeEach(function(done) {
-        Railway.destroyAll(function() {
+    beforeEach(function (done) {
+        Railway.destroyAll(function () {
             Station.destroyAll(done);
         });
     });
 
-    it('should define scope with query', function(done) {
+    it('should define scope with query', function (done) {
         Station.scope('active', { where: { isActive: true } });
-        Station.active.create(function(err, station) {
+        Station.active.create(function (err, station) {
             should.not.exist(err);
             should.exist(station);
             should.exist(station.isActive);
@@ -35,10 +53,10 @@ describe('sc0pe', function() {
         });
     });
 
-    it('should allow scope chaining', function(done) {
+    it('should allow scope chaining', function (done) {
         Station.scope('active', { where: { isActive: true } });
         Station.scope('subway', { where: { isUndeground: true } });
-        Station.active.subway.create(function(err, station) {
+        Station.active.subway.create(function (err, station) {
             should.not.exist(err);
             should.exist(station);
             station.isActive.should.be.true;
@@ -47,13 +65,13 @@ describe('sc0pe', function() {
         });
     });
 
-    it('should query all', function(done) {
+    it('should query all', function (done) {
         Station.scope('active', { where: { isActive: true } });
         Station.scope('inactive', { where: { isActive: false } });
         Station.scope('ground', { where: { isUndeground: true } });
-        Station.active.ground.create(function() {
-            Station.inactive.ground.create(function() {
-                Station.ground.inactive(function(err, ss) {
+        Station.active.ground.create(function () {
+            Station.inactive.ground.create(function () {
+                Station.ground.inactive(function (err, ss) {
                     ss.should.have.lengthOf(1);
                     done();
                 });
@@ -61,12 +79,12 @@ describe('sc0pe', function() {
         });
     });
 
-    it('should destroy all', function(done) {
-        Station.inactive.ground.create(function() {
-            Station.inactive(function(err, ss) {
+    it('should destroy all', function (done) {
+        Station.inactive.ground.create(function () {
+            Station.inactive(function (err, ss) {
                 ss.should.have.lengthOf(1);
-                Station.inactive.destroyAll(function() {
-                    Station.inactive(true, function(err, ss) {
+                Station.inactive.destroyAll(function () {
+                    Station.inactive(true, function (err, ss) {
                         ss.should.have.lengthOf(0);
                         done();
                     });

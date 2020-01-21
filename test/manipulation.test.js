@@ -1,10 +1,17 @@
-import * as should from "./init.js";
+'use strict';
 
-let db, Person;
+var _init = require('./init.js');
 
-describe('manipulation', function() {
+var should = _interopRequireWildcard(_init);
 
-    before(function(done) {
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var db = void 0,
+    Person = void 0;
+
+describe('manipulation', function () {
+
+    before(function (done) {
         db = getSchema();
 
         Person = db.define('Person', {
@@ -17,20 +24,19 @@ describe('manipulation', function() {
         });
 
         db.automigrate(done);
-
     });
 
-    describe('create', function() {
+    describe('create', function () {
 
-        before(function(done) {
+        before(function (done) {
             Person.destroyAll(done);
         });
 
-        it('should create instance', function(done) {
-            Person.create({ name: 'Anatoliy' }).then(function(p) {
+        it('should create instance', function (done) {
+            Person.create({ name: 'Anatoliy' }).then(function (p) {
                 p.name.should.equal('Anatoliy');
                 should.exist(p);
-                Person.find(p.id, function(err, person) {
+                Person.find(p.id, function (err, person) {
                     person.id.should.equal(p.id);
                     person.name.should.equal('Anatoliy');
                     done();
@@ -38,16 +44,16 @@ describe('manipulation', function() {
             }).catch(done);
         });
 
-        it('should return instance of object', function(done) {
-            Person.create().then(function(person) {
+        it('should return instance of object', function (done) {
+            Person.create().then(function (person) {
                 should.exist(person);
                 person.should.be.an.instanceOf(Person);
                 done();
             }).catch(done);
         });
 
-        it('should work when called without callback', function(done) {
-            Person.afterCreate = function(next) {
+        it('should work when called without callback', function (done) {
+            Person.afterCreate = function (next) {
                 this.should.be.an.instanceOf(Person);
                 this.name.should.equal('Nickolay');
                 should.exist(this.id);
@@ -58,12 +64,12 @@ describe('manipulation', function() {
             Person.create({ name: 'Nickolay' });
         });
 
-        it('should create instance with blank data', function(done) {
-            Person.create(function(err, p) {
+        it('should create instance with blank data', function (done) {
+            Person.create(function (err, p) {
                 should.not.exist(err);
                 should.exist(p);
                 should.not.exists(p.name);
-                Person.find(p.id, function(err, person) {
+                Person.find(p.id, function (err, person) {
                     person.id.should.equal(p.id);
                     should.not.exists(person.name);
                     done();
@@ -71,8 +77,8 @@ describe('manipulation', function() {
             });
         });
 
-        it('should work when called with no data and callback', function(done) {
-            Person.afterCreate = function(next) {
+        it('should work when called with no data and callback', function (done) {
+            Person.afterCreate = function (next) {
                 this.should.be.an.instanceOf(Person);
                 should.not.exist(this.name);
                 should.exist(this.id);
@@ -83,16 +89,16 @@ describe('manipulation', function() {
             Person.create();
         });
 
-        it('should create batch of objects', function(done) {
-            const batch = [{ name: 'Shaltay' }, { name: 'Boltay' }, {}];
-            Person.create(batch, function(e, ps) {
+        it('should create batch of objects', function (done) {
+            var batch = [{ name: 'Shaltay' }, { name: 'Boltay' }, {}];
+            Person.create(batch, function (e, ps) {
                 should.not.exist(e);
                 should.exist(ps);
                 ps.should.be.instanceOf(Array);
                 ps.should.have.lengthOf(batch.length);
 
                 Person.validatesPresenceOf('name');
-                Person.create(batch, function(errors, persons) {
+                Person.create(batch, function (errors, persons) {
                     delete Person._validations;
                     should.exist(errors);
                     errors.should.have.lengthOf(batch.length);
@@ -110,26 +116,26 @@ describe('manipulation', function() {
         });
     });
 
-    describe('save', function() {
+    describe('save', function () {
 
-        it('should save new object', function(done) {
-            const p = new Person;
-            p.save(function(err) {
+        it('should save new object', function (done) {
+            var p = new Person();
+            p.save(function (err) {
                 should.not.exist(err);
                 should.exist(p.id);
                 done();
             });
         });
 
-        it('should save existing object', function(done) {
-            Person.findOne(function(err, p) {
+        it('should save existing object', function (done) {
+            Person.findOne(function (err, p) {
                 should.not.exist(err);
                 p.name = 'Hans';
                 p.propertyChanged('name').should.be.true;
-                p.save(function(err) {
+                p.save(function (err) {
                     should.not.exist(err);
                     p.propertyChanged('name').should.be.false;
-                    Person.findOne(function(err, p) {
+                    Person.findOne(function (err, p) {
                         should.not.exist(err);
                         p.name.should.equal('Hans');
                         p.propertyChanged('name').should.be.false;
@@ -139,18 +145,18 @@ describe('manipulation', function() {
             });
         });
 
-        it('should save invalid object (skipping validation)', function(done) {
-            Person.findOne(function(err, p) {
+        it('should save invalid object (skipping validation)', function (done) {
+            Person.findOne(function (err, p) {
                 should.not.exist(err);
-                p.isValid = function(done) {
+                p.isValid = function (done) {
                     process.nextTick(done);
                     return false;
                 };
                 p.name = 'Nana';
-                p.save(function(err) {
+                p.save(function (err) {
                     should.exist(err);
                     p.propertyChanged('name').should.be.true;
-                    p.save({ validate: false }, function(err) {
+                    p.save({ validate: false }, function (err) {
                         should.not.exist(err);
                         p.propertyChanged('name').should.be.false;
                         done();
@@ -159,11 +165,11 @@ describe('manipulation', function() {
             });
         });
 
-        it('should save invalid new object (skipping validation)', function(done) {
-            const p = new Person();
+        it('should save invalid new object (skipping validation)', function (done) {
+            var p = new Person();
             p.isNewRecord().should.be.true;
 
-            p.isValid = function(done) {
+            p.isValid = function (done) {
                 if (done) {
                     process.nextTick(done);
                 }
@@ -171,7 +177,7 @@ describe('manipulation', function() {
             };
             p.isValid().should.be.false;
 
-            p.save({ validate: false }, function(err) {
+            p.save({ validate: false }, function (err) {
                 should.not.exist(err);
                 p.isNewRecord().should.be.false;
                 p.isValid().should.be.false;
@@ -179,49 +185,48 @@ describe('manipulation', function() {
             });
         });
 
-        it('should save throw error on validation', function() {
-            Person.findOne(function(err, p) {
+        it('should save throw error on validation', function () {
+            Person.findOne(function (err, p) {
                 should.not.exist(err);
-                p.isValid = function(cb) {
+                p.isValid = function (cb) {
                     cb(false);
                     return false;
                 };
                 p.save({
                     'throws': true
-                }).catch(function(err) {
+                }).catch(function (err) {
                     should.exist(err);
                 });
             });
         });
 
-        it.skip('should save with custom fields', function() {
-            return Person.create({ name: 'Anatoliy' }, function(err, p) {
+        it.skip('should save with custom fields', function () {
+            return Person.create({ name: 'Anatoliy' }, function (err, p) {
                 should.exist(p.id);
                 should.exist(p.name);
                 should.not.exist(p['full_name']);
-                const storedObj = JSON.parse(db.adapter.cache.Person[p.id]);
+                var storedObj = JSON.parse(db.adapter.cache.Person[p.id]);
                 should.exist(storedObj['full_name']);
             });
         });
-
     });
 
-    describe('updateAttributes', function() {
-        let person;
+    describe('updateAttributes', function () {
+        var person = void 0;
 
-        before(function(done) {
-            Person.destroyAll(function() {
-                Person.create().then(function(pers) {
+        before(function (done) {
+            Person.destroyAll(function () {
+                Person.create().then(function (pers) {
                     person = pers;
                     done();
                 });
             });
         });
 
-        it('should update one attribute', function(done) {
-            person.updateAttribute('name', 'Paul Graham', function(err, p) {
+        it('should update one attribute', function (done) {
+            person.updateAttribute('name', 'Paul Graham', function (err, p) {
                 should.not.exist(err);
-                Person.all(function(e, ps) {
+                Person.all(function (e, ps) {
                     should.not.exist(err);
                     ps.should.have.lengthOf(1);
                     ps.pop().name.should.equal('Paul Graham');
@@ -231,13 +236,13 @@ describe('manipulation', function() {
         });
     });
 
-    describe('destroy', function() {
+    describe('destroy', function () {
 
-        it('should destroy record', function(done) {
-            Person.create(function(err, p) {
-                p.destroy(function(err) {
+        it('should destroy record', function (done) {
+            Person.create(function (err, p) {
+                p.destroy(function (err) {
                     should.not.exist(err);
-                    Person.exists(p.id, function(err, ex) {
+                    Person.exists(p.id, function (err, ex) {
                         ex.should.not.be.ok;
                         done();
                     });
@@ -245,12 +250,12 @@ describe('manipulation', function() {
             });
         });
 
-        it('should destroy all records', function(done) {
-            Person.destroyAll(function(err) {
+        it('should destroy all records', function (done) {
+            Person.destroyAll(function (err) {
                 should.not.exist(err);
-                Person.all(function(err, posts) {
+                Person.all(function (err, posts) {
                     posts.should.have.lengthOf(0);
-                    Person.count(function(err, count) {
+                    Person.count(function (err, count) {
                         count.should.eql(0);
                         done();
                     });
@@ -262,48 +267,49 @@ describe('manipulation', function() {
         it('should destroy filtered set of records');
     });
 
-    describe('iterate', function() {
+    describe('iterate', function () {
 
-        before(function(next) {
-            Person.destroyAll().then(function() {
-                const ps = [];
-                for (let i = 0; i < 507; i += 1) {
+        before(function (next) {
+            Person.destroyAll().then(function () {
+                var ps = [];
+                for (var i = 0; i < 507; i += 1) {
                     ps.push({ name: 'Person ' + i });
                 }
-                Person.create(ps).then(function(x) {
+                Person.create(ps).then(function (x) {
                     next();
                 });
             });
         });
 
-        it('should iterate through the batch of objects', function(done) {
-            let num = 0;
-            Person.iterate({ batchSize: 100, limit: 507 }, function(person, next, i) {
+        it('should iterate through the batch of objects', function (done) {
+            var num = 0;
+            Person.iterate({ batchSize: 100, limit: 507 }, function (person, next, i) {
                 num += 1;
                 next();
-            }, function(err) {
+            }, function (err) {
                 num.should.equal(507);
                 done();
             });
         });
 
-        it('should take limit into account', function(done) {
-            let num = 0;
-            Person.iterate({ batchSize: 20, limit: 21 }, function(person, next, i) {
+        it('should take limit into account', function (done) {
+            var num = 0;
+            Person.iterate({ batchSize: 20, limit: 21 }, function (person, next, i) {
                 num += 1;
                 next();
-            }, function(err) {
+            }, function (err) {
                 num.should.equal(21);
                 done();
             });
         });
 
-        it('should process in concurrent mode', function(done) {
-            let num = 0, time = Date.now();
-            Person.iterate({ batchSize: 10, limit: 21, concurrent: true }, function(person, next, i) {
+        it('should process in concurrent mode', function (done) {
+            var num = 0,
+                time = Date.now();
+            Person.iterate({ batchSize: 10, limit: 21, concurrent: true }, function (person, next, i) {
                 num += 1;
                 setTimeout(next, 20);
-            }, function(err) {
+            }, function (err) {
                 num.should.equal(21);
                 should.ok(Date.now() - time < 300, 'should work in less than 300ms');
                 done();
@@ -311,9 +317,9 @@ describe('manipulation', function() {
         });
     });
 
-    describe('initialize', function() {
-        it('should initialize object properly', function() {
-            let hw = 'Hello word',
+    describe('initialize', function () {
+        it('should initialize object properly', function () {
+            var hw = 'Hello word',
                 now = Date.now(),
                 person = new Person({ name: hw });
 
@@ -326,8 +332,8 @@ describe('manipulation', function() {
             person.isNewRecord().should.be.true;
         });
 
-        it('should work when constructor called as function', function() {
-            const p = Person({ name: 'John Resig' });
+        it('should work when constructor called as function', function () {
+            var p = Person({ name: 'John Resig' });
             p.should.be.an.instanceOf(Person);
             p.name.should.equal('John Resig');
         });

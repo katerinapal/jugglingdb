@@ -1,11 +1,21 @@
-import sinon_moduleDefault from "sinon";
+'use strict';
+
+var _sinon = require('sinon');
+
+var _sinon2 = _interopRequireDefault(_sinon);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
 try {
-    global.sinon = sinon_moduleDefault;
+    global.sinon = _sinon2.default;
 } catch (e) {
     // ignore
 }
 
-let group_name = false, EXT_EXP;
+var group_name = false,
+    EXT_EXP = void 0;
 function it(should, test_case) {
     check_external_exports();
     if (group_name) {
@@ -22,10 +32,10 @@ function context(name, tests) {
     EXT_EXP[name] = {};
     group_name = name;
     tests({
-        before(f) {
+        before: function before(f) {
             it('setUp', f);
         },
-        after(f) {
+        after: function after(f) {
             it('tearDown', f);
         }
     });
@@ -42,8 +52,5 @@ exports.init = function init(external_exports) {
 };
 
 function check_external_exports() {
-    if (!EXT_EXP) throw new Error(
-        'Before run this, please ensure that ' +
-        'require("spec_helper").init(exports); called');
+    if (!EXT_EXP) throw new Error('Before run this, please ensure that ' + 'require("spec_helper").init(exports); called');
 }
-

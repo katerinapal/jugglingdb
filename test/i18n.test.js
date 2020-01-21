@@ -1,10 +1,18 @@
-import * as should from "./init.js";
-let db, User;
+'use strict';
 
-describe('i18n', function() {
+var _init = require('./init.js');
+
+var should = _interopRequireWildcard(_init);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var db = void 0,
+    User = void 0;
+
+describe('i18n', function () {
     db = getSchema();
 
-    before(function() {
+    before(function () {
 
         User = db.define('User', {
             email: { type: String, index: true, limit: 100 },
@@ -25,8 +33,7 @@ describe('i18n', function() {
             },
             ru: {
                 validation: {
-                    name: {
-                    },
+                    name: {},
                     email: {
                         presence: 'Электропочта надо',
                         uniqueness: 'Электропочта уже взят'
@@ -39,10 +46,10 @@ describe('i18n', function() {
         User.validatesPresenceOf('name', 'email');
     });
 
-    it('should hook up localized string', function(done) {
-        User.create({ email: 'John.Doe@example.com', name: 'John Doe' }, function(err, user) {
-            User.create({ email: 'John.Doe@example.com' }, function(err, user) {
-                const errors = user.errors.__localize('ru');
+    it('should hook up localized string', function (done) {
+        User.create({ email: 'John.Doe@example.com', name: 'John Doe' }, function (err, user) {
+            User.create({ email: 'John.Doe@example.com' }, function (err, user) {
+                var errors = user.errors.__localize('ru');
                 errors.name[0].should.equal('can\'t be blank');
                 errors.email[0].should.equal('Электропочта уже взят');
                 done();

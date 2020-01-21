@@ -1,4 +1,9 @@
-import "./datatype.test.js";
-import "./basic-querying.test.js";
-import "./hooks.test.js";
-import "./relations.test.js";
+"use strict";
+
+require("./datatype.test.js");
+
+require("./basic-querying.test.js");
+
+require("./hooks.test.js");
+
+require("./relations.test.js");
