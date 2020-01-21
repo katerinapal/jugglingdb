@@ -1,5 +1,4 @@
-// This test written in mocha+should.js
-var should = require('./init.js');
+import * as should from "./init.js";
 var db, User;
 
 describe('basic-querying', function() {

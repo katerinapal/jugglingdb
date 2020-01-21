@@ -1,19 +1,20 @@
-module.exports = require('should');
+import exports from "should";
+import semicov_moduleObject from "semicov";
+import * as Schema from "../";
+module.exports = exports;
 
 if (!process.env.TRAVIS) {
     if (typeof __cov === 'undefined') {
         process.on('exit', function () {
-            require('semicov').report();
+            semicov_moduleObject.report();
         });
     }
 
-    require('semicov').init('lib');
+    semicov_moduleObject.init('lib');
 }
-
-var Schema = require('../').Schema;
 
 if (!('getSchema' in global)) {
     global.getSchema = function() {
-        return new Schema('memory');
+        return new Schema.Schema('memory');
     };
 }

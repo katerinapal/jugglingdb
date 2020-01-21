@@ -1,7 +1,5 @@
-// This test written in mocha+should.js
-var should = require('./init.js');
-
-var Schema = require('../').Schema;
+import * as should from "./init.js";
+import * as Schema from "../";
 
 describe('JSON property', function() {
     var schema, Model;

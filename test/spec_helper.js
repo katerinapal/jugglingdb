@@ -1,11 +1,12 @@
+import semicov from "semicov";
+import sinon_moduleDefault from "sinon";
 if (!process.env.TRAVIS) {
-    var semicov = require('semicov');
     semicov.init('lib', 'JugglingDB');
     process.on('exit', semicov.report);
 }
 
 try {
-    global.sinon = require('sinon');
+    global.sinon = sinon_moduleDefault;
 } catch (e) {
     // ignore
 }

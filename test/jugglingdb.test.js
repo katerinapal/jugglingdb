@@ -1,7 +1,5 @@
-// This test written in mocha+should.js
-var should = require('./init.js');
-
-var jugglingdb = require('../');
+import * as should from "./init.js";
+import * as jugglingdb from "../";
 
 describe('jugglingdb', function() {
     it('should expose version', function () {

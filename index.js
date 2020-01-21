@@ -1,8 +1,9 @@
-var fs = require('fs');
-var path = require('path');
+import fs from "fs";
+import path from "path";
+import { AbstractClass } from "./lib/model.js";
 
-var Schema = exports.Schema = require('./lib/schema').Schema;
-exports.AbstractClass = require('./lib/model.js');
+var Schema = Schema_obj = require('./lib/schema').Schema;
+var AbstractClass_obj = AbstractClass;
 
 var baseSQL = './lib/sql';
 
@@ -10,7 +11,7 @@ exports.__defineGetter__('BaseSQL', function () {
     return require(baseSQL);
 });
 
-exports.loadSchema = function(filename, settings, compound) {
+var loadSchema = function(filename, settings, compound) {
     var schema = [];
     var definitions = require(filename);
     Object.keys(definitions).forEach(function(k) {
@@ -46,13 +47,15 @@ exports.loadSchema = function(filename, settings, compound) {
     }
 };
 
-exports.init = function (compound) {
+export { loadSchema };;
+
+var init = function (compound) {
     if (global.railway) {
         global.railway.orm = exports;
     } else {
         compound.orm = {
-            Schema: exports.Schema,
-            AbstractClass: exports.AbstractClass
+            Schema: Schema_obj,
+            AbstractClass: AbstractClass_obj
         };
         if (compound.app.enabled('noeval schema')) {
             compound.orm.schema = exports.loadSchema(
@@ -96,6 +99,8 @@ exports.init = function (compound) {
     }
 };
 
+export { init };;
+
 exports.__defineGetter__('version', function () {
     return JSON.parse(fs.readFileSync(__dirname + '/package.json')).version;
 });
@@ -104,3 +109,7 @@ var commonTest = './test/common_test';
 exports.__defineGetter__('test', function () {
     return require(commonTest);
 });
+var exported_Schema = Schema_obj = require("./lib/schema").Schema;
+export { exported_Schema as Schema };
+var exported_AbstractClass;
+export { exported_AbstractClass as AbstractClass };
