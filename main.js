@@ -1,11 +1,13 @@
+import when_moduleObject from "when";
+import * as index from "./index";
 var isNodeSix = process.versions.node >= '6';
 
 if (!isNodeSix) {
-    global.Promise = require('when').Promise;
+    global.Promise = when_moduleObject.Promise;
 }
 
 module.exports = isNodeSix
-    ? require('./index')
+    ? index
     : require('./build/index');
 
 

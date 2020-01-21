@@ -1,9 +1,9 @@
-module.exports = require('should');
-
-const Schema = require('../').Schema;
+import exports from "should";
+import * as Schema from "../";
+module.exports = exports;
 
 if (!('getSchema' in global)) {
     global.getSchema = function() {
-        return new Schema('memory');
+        return new Schema.Schema('memory');
     };
 }

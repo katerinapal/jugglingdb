@@ -1,5 +1,6 @@
+import sinon_moduleDefault from "sinon";
 try {
-    global.sinon = require('sinon');
+    global.sinon = sinon_moduleDefault;
 } catch (e) {
     // ignore
 }

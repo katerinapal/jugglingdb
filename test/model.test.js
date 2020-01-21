@@ -1,5 +1,5 @@
-const should = require('./init.js');
-const expect = require('expect');
+import * as should from "./init.js";
+import expect from "expect";
 
 let db, Model;
 

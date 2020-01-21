@@ -1,93 +1,136 @@
 {
-  "name": "jugglingdb",
-  "description": "Node.js ORM for every database: redis, mysql, mongodb, postgres, sqlite, ...",
-  "version": "2.0.1",
-  "author": "Anatoliy Chakkaev <rpm1602@gmail.com>",
-  "contributors": [
-    {
-      "name": "Anatoliy Chakkaev",
-      "email": "rpm1602@gmail.com"
+    "name": "jugglingdb",
+    "description": "Node.js ORM for every database: redis, mysql, mongodb, postgres, sqlite, ...",
+    "version": "2.0.1",
+    "author": "Anatoliy Chakkaev <rpm1602@gmail.com>",
+    "contributors": [
+        {
+            "name": "Anatoliy Chakkaev",
+            "email": "rpm1602@gmail.com"
+        },
+        {
+            "name": "Julien Guimont",
+            "email": "julien.guimont@gmail.com"
+        },
+        {
+            "name": "Joseph Junker",
+            "email": "joseph.jnk@gmail.com"
+        },
+        {
+            "name": "Henri Bergius",
+            "email": "henri.bergius@iki.fi"
+        },
+        {
+            "name": "redvulps",
+            "email": "fabopereira@gmail.com"
+        },
+        {
+            "name": "Felipe Sateler",
+            "email": "fsateler@gmail.com"
+        },
+        {
+            "name": "Amir M. Mahmoudi",
+            "email": "a@geeknux.com"
+        },
+        {
+            "name": "Justinas Stankevičius",
+            "email": "justinas@justinas.me"
+        },
+        {
+            "name": "Rick O'Toole",
+            "email": "patrick.n.otoole@gmail.com"
+        },
+        {
+            "name": "Nicholas Westlake",
+            "email": "nicholasredlin@gmail.com"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/1602/jugglingdb"
     },
-    {
-      "name": "Julien Guimont",
-      "email": "julien.guimont@gmail.com"
+    "main": "main.js",
+    "scripts": {
+        "test": "mocha --bail --reporter spec --check-leaks test/",
+        "test-babel": "mocha --compilers js:babel-register --bail --reporter spec --check-leaks test/",
+        "prepublish": "make build",
+        "test-coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter landing --no-exit --check-leaks test/",
+        "test-ci-babel": "node_modules/mocha/bin/_mocha --compilers js:babel-register --reporter spec --check-leaks test/",
+        "test-ci-native": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
+        "compile-libhooksjs": "babel lib\\hooks.js -o lib\\hooks.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libjutiljs": "babel lib\\jutil.js -o lib\\jutil.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libmodeljs": "babel lib\\model.js -o lib\\model.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libscopejs": "babel lib\\scope.js -o lib\\scope.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libutilsjs": "babel lib\\utils.js -o lib\\utils.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testinitjs": "babel test\\init.js -o test\\init.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-legacycompoundschemaloaderjs": "babel legacy-compound-schema-loader.js -o legacy-compound-schema-loader.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libschemajs": "babel lib\\schema.js -o lib\\schema.js --require babel-polyfill --presets env",
+        "compile-libincludejs": "babel lib\\include.js -o lib\\include.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-librailwayjs": "babel lib\\railway.js -o lib\\railway.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-librelationsjs": "babel lib\\relations.js -o lib\\relations.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testi18ntestjs": "babel test\\i18n.test.js -o test\\i18n.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testjsontestjs": "babel test\\json.test.js -o test\\json.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libvalidationsjs": "babel lib\\validations.js -o lib\\validations.js --require babel-polyfill --presets env",
+        "compile-testhookstestjs": "babel test\\hooks.test.js -o test\\hooks.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testmodeltestjs": "babel test\\model.test.js -o test\\model.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testscopetestjs": "babel test\\scope.test.js -o test\\scope.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testcommon_testjs": "babel test\\common_test.js -o test\\common_test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testschematestjs": "babel test\\schema.test.js -o test\\schema.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testspec_helperjs": "babel test\\spec_helper.js -o test\\spec_helper.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testcommonbatchjs": "babel test\\common.batch.js -o test\\common.batch.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testincludetestjs": "babel test\\include.test.js -o test\\include.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testdatatypetestjs": "babel test\\datatype.test.js -o test\\datatype.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testdefaultstestjs": "babel test\\defaults.test.js -o test\\defaults.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libadaptersmemoryjs": "babel lib\\adapters\\memory.js -o lib\\adapters\\memory.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testrelationstestjs": "babel test\\relations.test.js -o test\\relations.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-legacycompoundinitjs": "babel legacy-compound-init.js -o legacy-compound-init.js --require babel-polyfill --presets env",
+        "compile-testjugglingdbtestjs": "babel test\\jugglingdb.test.js -o test\\jugglingdb.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testvalidationstestjs": "babel test\\validations.test.js -o test\\validations.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-testmanipulationtestjs": "babel test\\manipulation.test.js -o test\\manipulation.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-mainjs": "babel main.js -o main.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-indexjs": "babel index.js -o index.js --require babel-polyfill --presets env",
+        "compile-testbasicqueryingtestjs": "babel test\\basic-querying.test.js -o test\\basic-querying.test.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-libsqljs": "babel lib\\sql.js -o lib\\sql.js --require babel-polyfill --presets es2015-without-strict",
+        "compile-1_script": "npm run compile-libhooksjs && npm run compile-libjutiljs && npm run compile-libmodeljs && npm run compile-libscopejs && npm run compile-libutilsjs && npm run compile-testinitjs && npm run compile-legacycompoundschemaloaderjs && npm run compile-libschemajs && npm run compile-libincludejs && npm run compile-librailwayjs && npm run compile-librelationsjs && npm run compile-testi18ntestjs && npm run compile-testjsontestjs && npm run compile-libvalidationsjs && npm run compile-testhookstestjs && npm run compile-testmodeltestjs && npm run compile-testscopetestjs && npm run compile-testcommon_testjs && npm run compile-testschematestjs && npm run compile-testspec_helperjs",
+        "compile-2_script": "npm run compile-testhookstestjs && npm run compile-testmodeltestjs && npm run compile-testscopetestjs && npm run compile-testcommon_testjs && npm run compile-testschematestjs && npm run compile-testspec_helperjs && npm run compile-testcommonbatchjs && npm run compile-testincludetestjs && npm run compile-testdatatypetestjs && npm run compile-testdefaultstestjs && npm run compile-libadaptersmemoryjs && npm run compile-testrelationstestjs && npm run compile-legacycompoundinitjs && npm run compile-testjugglingdbtestjs && npm run compile-testvalidationstestjs && npm run compile-testmanipulationtestjs && npm run compile-mainjs && npm run compile-indexjs && npm run compile-testbasicqueryingtestjs && npm run compile-libsqljs",
+        "compile": "npm run compile-1_script && npm run compile-2_script"
     },
-    {
-      "name": "Joseph Junker",
-      "email": "joseph.jnk@gmail.com"
+    "man": [
+        "./docs/man/jugglingdb.3",
+        "./docs/man/schema.3",
+        "./docs/man/model.3",
+        "./docs/man/hooks.3",
+        "./docs/man/validations.3",
+        "./docs/man/roadmap.3",
+        "./docs/man/changelog.3"
+    ],
+    "engines": [
+        "node >= 0.6"
+    ],
+    "devDependencies": {
+        "babel-cli": "latest",
+        "babel-preset-es2015": "^6.9.0",
+        "babel-register": "^6.11.5",
+        "eslint": "^3.2.0",
+        "eslint-config-1602": "^1.2.0",
+        "expect": "^1.20.2",
+        "istanbul": "^0.4.4",
+        "jshint": "2.9.2",
+        "mocha": "2.5.3",
+        "should": "9.0.2",
+        "babel-core": "latest",
+        "babel-plugin-add-module-exports": "latest",
+        "babel-plugin-transform-es2015-modules-commonjs": "latest",
+        "babel-polyfill": "latest",
+        "babel-preset-env": "latest",
+        "babel-preset-es2015-without-strict": "latest"
     },
-    {
-      "name": "Henri Bergius",
-      "email": "henri.bergius@iki.fi"
+    "dependencies": {
+        "inflection": "=1.2.7",
+        "when": "3.7.3"
     },
-    {
-      "name": "redvulps",
-      "email": "fabopereira@gmail.com"
-    },
-    {
-      "name": "Felipe Sateler",
-      "email": "fsateler@gmail.com"
-    },
-    {
-      "name": "Amir M. Mahmoudi",
-      "email": "a@geeknux.com"
-    },
-    {
-      "name": "Justinas Stankevičius",
-      "email": "justinas@justinas.me"
-    },
-    {
-      "name": "Rick O'Toole",
-      "email": "patrick.n.otoole@gmail.com"
-    },
-    {
-      "name": "Nicholas Westlake",
-      "email": "nicholasredlin@gmail.com"
+    "license": "MIT",
+    "jshintConfig": {
+        "proto": true
     }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/1602/jugglingdb"
-  },
-  "main": "main.js",
-  "scripts": {
-    "test": "mocha --bail --reporter spec --check-leaks test/",
-    "test-babel": "mocha --compilers js:babel-register --bail --reporter spec --check-leaks test/",
-    "prepublish": "make build",
-    "test-coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter landing --no-exit --check-leaks test/",
-    "test-ci-babel": "node_modules/mocha/bin/_mocha --compilers js:babel-register --reporter spec --check-leaks test/",
-    "test-ci-native": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/"
-  },
-  "man": [
-    "./docs/man/jugglingdb.3",
-    "./docs/man/schema.3",
-    "./docs/man/model.3",
-    "./docs/man/hooks.3",
-    "./docs/man/validations.3",
-    "./docs/man/roadmap.3",
-    "./docs/man/changelog.3"
-  ],
-  "engines": [
-    "node >= 0.6"
-  ],
-  "devDependencies": {
-    "babel-cli": "^6.11.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-register": "^6.11.5",
-    "eslint": "^3.2.0",
-    "eslint-config-1602": "^1.2.0",
-    "expect": "^1.20.2",
-    "istanbul": "^0.4.4",
-    "jshint": "2.9.2",
-    "mocha": "2.5.3",
-    "should": "9.0.2"
-  },
-  "dependencies": {
-    "inflection": "=1.2.7",
-    "when": "3.7.3"
-  },
-  "license": "MIT",
-  "jshintConfig": {
-    "proto": true
-  }
 }
